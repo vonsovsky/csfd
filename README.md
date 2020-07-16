@@ -17,6 +17,6 @@ pip install -r requirements
 ## Database
 
 Populated db.sqlite3 is already included in the project.
-If you need to repopulate database, you can delete sqlite file and run `python scraper.py`.
+If you need to repopulate database, you can delete sqlite file and run `python scraper.py` in csfd subfolder.
 
 There is also /perform-scrape page, but it's considerably slower for this task.
