@@ -1,0 +1,10 @@
+<a href="{% url 'index' %}">Zpět na hlavní stranu</a>
+<hr />
+<h2>{{ name }}</h2>
+
+<h3>Filmy</h3>
+<ul>
+    {% for movie in movies %}
+    <li><a href="{% url 'movie_detail' movie.1 %}">{{ movie.0 }}</a></li>
+    {% endfor %}
+</ul>

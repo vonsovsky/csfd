@@ -1,0 +1,26 @@
+<h2>{{ name }}</h2>
+
+<div style="margin: auto;">
+    <form method="post" action="">
+        <input type="text" value="{{ search_query }}" placeholder="Hledat" />
+        <button type="submit">Hledat</button>
+    </form>
+</div>
+
+<div style="width: 47%; border: 1px solid black; float: left; margin-right: 20px;">
+<h3>Filmy</h3>
+<ul>
+    {% for movie in movies %}
+    <li><a href="{% url 'movie_detail' movie.1 %}">{{ movie.0 }}</a></li>
+    {% endfor %}
+</ul>
+</div>
+
+<div style="width: 47%; border: 1px solid black; float: left;">
+<h3>Herci</h3>
+<ul>
+    {% for actor in actors %}
+    <li><a href="{{ actor.1 }}">{{ actor.0 }}</a></li>
+    {% endfor %}
+</ul>
+</div>

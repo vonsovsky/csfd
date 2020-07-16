@@ -1,0 +1,32 @@
+<form action="" method="get" novalidate>
+<table>
+  {{ form.as_table }}
+  <tr>
+    <td>&nbsp;</td>
+    <td><input type="submit" value="Hledat"></td>
+  </tr>
+</table>
+</form>
+
+{% if submitted %}
+  <h2>{{ name }}</h2>
+
+  <div style="width: 47%; border: 1px solid black; float: left; margin-right: 20px;">
+  <h3>Filmy</h3>
+  <ul>
+      {% for movie in movies %}
+      <li><a href="{% url 'movie_detail' movie.1 %}">{{ movie.0 }}</a></li>
+      {% endfor %}
+  </ul>
+  </div>
+
+  <div style="width: 47%; border: 1px solid black; float: left;">
+  <h3>Herci</h3>
+  <ul>
+      {% for actor in actors %}
+      <li><a href="{% url 'actor_detail' actor.1 %}">{{ actor.0 }}</a></li>
+      {% endfor %}
+  </ul>
+  </div>
+
+{% endif %}
