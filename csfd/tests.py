@@ -1,11 +1,11 @@
-from django.test import TestCase
 import os
 
-from csfd.views import beautify
-import csfd.views
+from django.test import TestCase
 
-from csfd.model import DBModel
+import csfd.views
 from csfd.custom_connection import CustomConnection
+from csfd.model import DBModel
+from csfd.views import beautify
 
 TEST_FILE = "test.sqlite3"
 
