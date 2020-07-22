@@ -1,6 +1,5 @@
-from django.http import HttpResponse
-from csfd.scraper import populate, beautify
-from csfd.model import DBModel
+from csfd.string_helper import beautify
+from csfd.db_model import DBModel
 from django.shortcuts import render
 from django import forms
 
@@ -30,8 +29,8 @@ def _search_for(search_query):
     movies = db_model.search_movies(search_query)
     actors = db_model.search_actors(search_query)
 
-    movies = map(lambda x: (x[0], x[1].replace(' ', '-')), movies)
-    actors = map(lambda x: (x[0], x[1].replace(' ', '-')), actors)
+    movies = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(movies))
+    actors = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(actors))
 
     context = {
         'search_query': original_search_query,
@@ -44,11 +43,12 @@ def _search_for(search_query):
 
 def movie_detail(request, url_beautified):
     url_beautified = url_beautified.replace('-', ' ')
-    movie, actors = db_model.get_movie(url_beautified)
-    actors = map(lambda x: (x[0], x[1].replace(' ', '-')), actors)
+    movie = db_model.get_movie(url_beautified)
+    actors = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')},
+                 list(movie.actor_set.all()))
 
     context = {
-        'name': movie[1],
+        'name': movie.name,
         'actors': list(actors)
     }
     return render(request, 'movie_detail.html', context=context)
@@ -56,16 +56,11 @@ def movie_detail(request, url_beautified):
 
 def actor_detail(request, url_beautified):
     url_beautified = url_beautified.replace('-', ' ')
-    actor, movies = db_model.get_actor(url_beautified)
-    movies = map(lambda x: (x[0], x[1].replace(' ', '-')), movies)
+    actor = db_model.get_actor(url_beautified)
+    movies = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(actor.movies))
 
     context = {
-        'name': actor[1],
+        'name': actor.name,
         'movies': list(movies)
     }
     return render(request, 'actor_detail.html', context=context)
-
-
-def perform_scrape(request):
-    populate(db_model)
-    return HttpResponse("Scraping finished. All data are stored in database.")
