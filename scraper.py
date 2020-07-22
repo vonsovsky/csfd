@@ -1,19 +1,18 @@
+import os
 from typing import List, Dict
 
+import django
 import requests
-import unidecode
 from bs4 import BeautifulSoup
+from csfd.string_helper import beautify
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 URL_PREFIX = 'http://csfd.cz'
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "csfd.settings")
+django.setup()
 
-def beautify(name):
-    name = unidecode.unidecode(name)
-    name = name.lower()
-    name = name.replace('"', '').replace(',', '').replace(':', '').replace('-', '')
-    name = ' '.join(name.split())
-    return name
+from csfd.db_model import DBModel
 
 
 def get_movies() -> List[Dict[str, str]]:
@@ -33,7 +32,7 @@ def get_movies() -> List[Dict[str, str]]:
     return movies
 
 
-def get_actors_for_movie(url: str, actors) -> List[str]:
+def get_actors_for_movie(url: str) -> List[str]:
     movie_actors_list = []
     response = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -46,27 +45,29 @@ def get_actors_for_movie(url: str, actors) -> List[str]:
         beautified = beautify(actor_name)
         link = URL_PREFIX + actor['href']
 
-        movie_actors_list += [beautified]
-        if beautified not in actors:
-            actors[beautified] = {'name': actor_name, 'beautified': beautified, 'link': link}
+        movie_actors_list += [{'name': actor_name, 'beautified': beautified, 'link': link}]
 
     return movie_actors_list
 
 
-def populate(db_model):
-    movies = get_movies()
-    db_model.insert_movies_to_db(movies)
-    actors = {}
-    for i, movie in enumerate(movies):
-        print("{}: Getting actors for {}".format(i + 1, movie['name']))
-        actors_list = get_actors_for_movie(movie['link'], actors)
-        db_model.insert_actors_to_db(movie['db_id'], actors_list, actors)
-
-
 if __name__ == "__main__":
-    from model import DBModel
-    from custom_connection import CustomConnection
+    #db_model = DBModel()
+    #actors_list = get_actors_for_movie("http://csfd.cz/film/10135-forrest-gump/")
+    #actors = db_model.insert_actors_to_db(actors_list)
+    #a = 1 / 0
 
-    conn = CustomConnection("../db.sqlite3")
-    db_model = DBModel(conn=conn)
-    populate(db_model)
+    db_model = DBModel()
+    db_model.clear_db()
+    movies = get_movies()
+    #print(db_model.get_movie(""))
+    movies = db_model.insert_movies_to_db(movies)
+    for i, movie in enumerate(movies):
+        if i == 1:
+            a = 1
+        print("{}: Getting actors for {}".format(i + 1, movie.name))
+        actors_list = get_actors_for_movie(movie.link)
+        actors = db_model.insert_actors_to_db(actors_list)
+        db_model.link_actors_to_movies(movie, actors)
+
+    print(db_model.search_movies("forrest"))
+    print(db_model.get_movie("forrest gump"))

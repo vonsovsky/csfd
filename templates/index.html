@@ -15,7 +15,7 @@
   <h3>Filmy</h3>
   <ul>
       {% for movie in movies %}
-      <li><a href="{% url 'movie_detail' movie.1 %}">{{ movie.0 }}</a></li>
+      <li><a href="{% url 'movie_detail' movie.name_beautified %}">{{ movie.name }}</a></li>
       {% endfor %}
   </ul>
   </div>
@@ -24,7 +24,7 @@
   <h3>Herci</h3>
   <ul>
       {% for actor in actors %}
-      <li><a href="{% url 'actor_detail' actor.1 %}">{{ actor.0 }}</a></li>
+      <li><a href="{% url 'actor_detail' actor.name_beautified %}">{{ actor.name }}</a></li>
       {% endfor %}
   </ul>
   </div>
