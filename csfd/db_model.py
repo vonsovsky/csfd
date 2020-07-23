@@ -58,5 +58,5 @@ class DBModel:
     def get_movie(self, beautified):
         return Movie.objects.get(name_beautified=beautified)
 
-    def get_actor(self, beautified):
-        return Actor.objects.get(name_beautified=beautified)
+    def get_actor(self, id):
+        return Actor.objects.get(id=id)

@@ -20,5 +20,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('movies/detail/<str:url_beautified>/', views.movie_detail, name='movie_detail'),
-    path('actors/detail/<str:url_beautified>/', views.actor_detail, name='actor_detail'),
+    path('actors/detail/<int:actor_id>/', views.actor_detail, name='actor_detail'),
 ]

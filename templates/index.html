@@ -24,7 +24,7 @@
   <h3>Herci</h3>
   <ul>
       {% for actor in actors %}
-      <li><a href="{% url 'actor_detail' actor.name_beautified %}">{{ actor.name }}</a></li>
+      <li><a href="{% url 'actor_detail' actor.id %}">{{ actor.name }}</a></li>
       {% endfor %}
   </ul>
   </div>

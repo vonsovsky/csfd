@@ -30,7 +30,7 @@ def _search_for(search_query):
     actors = db_model.search_actors(search_query)
 
     movies = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(movies))
-    actors = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(actors))
+    actors = map(lambda x: {'id': x.id, 'name': x.name}, list(actors))
 
     context = {
         'search_query': original_search_query,
@@ -44,8 +44,7 @@ def _search_for(search_query):
 def movie_detail(request, url_beautified):
     url_beautified = url_beautified.replace('-', ' ')
     movie = db_model.get_movie(url_beautified)
-    actors = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')},
-                 list(movie.actors.all()))
+    actors = map(lambda x: {'id': x.id, 'name': x.name}, list(movie.actors.all()))
 
     context = {
         'name': movie.name,
@@ -54,10 +53,10 @@ def movie_detail(request, url_beautified):
     return render(request, 'movie_detail.html', context=context)
 
 
-def actor_detail(request, url_beautified):
-    url_beautified = url_beautified.replace('-', ' ')
-    actor = db_model.get_actor(url_beautified)
-    movies = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')}, list(actor.movies))
+def actor_detail(request, actor_id):
+    actor = db_model.get_actor(actor_id)
+    movies = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')},
+                 list(actor.movie_set.all()))
 
     context = {
         'name': actor.name,
