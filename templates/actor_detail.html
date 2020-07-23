@@ -5,6 +5,6 @@
 <h3>Filmy</h3>
 <ul>
     {% for movie in movies %}
-    <li><a href="{% url 'movie_detail' movie.1 %}">{{ movie.0 }}</a></li>
+    <li><a href="{% url 'movie_detail' movie.name_beautified %}">{{ movie.name }}</a></li>
     {% endfor %}
 </ul>
