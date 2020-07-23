@@ -1,6 +1,6 @@
 import sqlite3
 from typing import Dict, List
-from csfd.models import Actor, Movie
+from csfd.models import Actor, Movie, ActorMovie
 
 
 class DBModel:
@@ -24,7 +24,10 @@ class DBModel:
         return Movie.objects.all()
 
     def link_actors_to_movies(self, movie, actors):
-        movie.actor_set.add(*actors)
+        ActorMovie.objects.bulk_create([ActorMovie(**{'movie': movie,
+                                                      'actor': actor,
+                                                      'order': i})
+                                        for i, actor in enumerate(actors)])
 
     def insert_actors_to_db(self, actors):
         actors_to_create = []
@@ -45,7 +48,6 @@ class DBModel:
             actors_all += [Actor.objects.get(name_beautified=actor['beautified'])]
 
         return actors_all
-
 
     def search_movies(self, search_query):
         return Movie.objects.filter(name_beautified__contains=search_query)
