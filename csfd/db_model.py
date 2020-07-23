@@ -31,12 +31,10 @@ class DBModel:
 
     def insert_actors_to_db(self, actors):
         actors_to_create = []
-        actors_created = set()  # Do not resolve uniqueness for now
         for actor in actors:
-            db_actor = Actor.objects.filter(name_beautified=actor['beautified'])
-            if not db_actor and actor['beautified'] not in actors_created:
+            db_actor = Actor.objects.filter(link=actor['link'])
+            if not db_actor:
                 actors_to_create += [actor]
-                actors_created.add(actor['beautified'])
 
         Actor.objects.bulk_create([Actor(**{'name': actor['name'],
                                             'name_beautified': actor['beautified'],
@@ -45,7 +43,7 @@ class DBModel:
 
         actors_all = []
         for actor in actors:
-            actors_all += [Actor.objects.get(name_beautified=actor['beautified'])]
+            actors_all += [Actor.objects.get(link=actor['link'])]
 
         return actors_all
 
