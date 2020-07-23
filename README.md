@@ -14,9 +14,8 @@ pip install -r requirements
 
 `python manage.py test csfd.tests`
 
-## Database
+## Re-run list of movies
 
 Populated db.sqlite3 is already included in the project.
-If you need to repopulate database, you can delete sqlite file and run `python scraper.py`.
-
-There is also /perform-scrape page, but it's considerably slower for this task.
+If you need to repopulate database, you can delete sqlite file and run
+`python manage.py migrate` to create new data structure to be re-filled by `python scraper.py`.

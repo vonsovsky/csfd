@@ -45,7 +45,7 @@ def movie_detail(request, url_beautified):
     url_beautified = url_beautified.replace('-', ' ')
     movie = db_model.get_movie(url_beautified)
     actors = map(lambda x: {'name': x.name, 'name_beautified': x.name_beautified.replace(' ', '-')},
-                 list(movie.actor_set.all()))
+                 list(movie.actors.all()))
 
     context = {
         'name': movie.name,
