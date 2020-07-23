@@ -51,23 +51,12 @@ def get_actors_for_movie(url: str) -> List[str]:
 
 
 if __name__ == "__main__":
-    #db_model = DBModel()
-    #actors_list = get_actors_for_movie("http://csfd.cz/film/10135-forrest-gump/")
-    #actors = db_model.insert_actors_to_db(actors_list)
-    #a = 1 / 0
-
     db_model = DBModel()
     db_model.clear_db()
     movies = get_movies()
-    #print(db_model.get_movie(""))
     movies = db_model.insert_movies_to_db(movies)
     for i, movie in enumerate(movies):
-        if i == 1:
-            a = 1
         print("{}: Getting actors for {}".format(i + 1, movie.name))
         actors_list = get_actors_for_movie(movie.link)
         actors = db_model.insert_actors_to_db(actors_list)
         db_model.link_actors_to_movies(movie, actors)
-
-    print(db_model.search_movies("forrest"))
-    print(db_model.get_movie("forrest gump"))
