@@ -6,6 +6,10 @@ Top 300 movies from csfd.cz with their actors in Django
 
 pip install -r requirements
 
+or
+
+poetry install
+
 ## Usage
 
 `python manage.py runserver` to start local server
